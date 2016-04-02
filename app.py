@@ -3,13 +3,18 @@ import importlib
 import aiohttp_debugtoolbar
 from aiohttp import web
 
-import settings as app_settings
+import settings as settings_module
+from routes import RouterConfiguration
 
 
 class Application(web.Application):
 
+    settings = None
+    router_config = None
+
     def __init__(self, settings, **kwargs):
         self.settings = settings
+        self.router_config = RouterConfiguration(self)
 
         super().__init__(middlewares=self.get_middleware_factories(),
                          debug=self.settings.DEBUG)
@@ -27,18 +32,15 @@ class Application(web.Application):
             yield getattr(module, factory_name)
 
     def setup(self):
-        # setting up debug toolbar
+
         if self.settings.DEBUG:
             aiohttp_debugtoolbar.setup(self)
 
-        # linking routes and resources
-        app.router.add_route('GET', '/', hello)
+        # configure application router
+        self.router_config.link_routes()
 
 
-async def hello(request):
-    return web.Response(body=b"Hello, world")
-
-app = Application(app_settings)
-app.setup()
+application = Application(settings_module)
+application.setup()
 
 
