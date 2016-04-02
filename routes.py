@@ -40,3 +40,7 @@ class RouterConfiguration(object):
         # API routes
         with self.add_route_group('/api', api_views, 'api') as add_route:
             add_route('/', 'Test', name='test')
+
+        # Static routes
+        if self.application.settings.DEBUG:
+            self.application.router.add_static('/static/', 'static')

@@ -1,0 +1,1 @@
+// test static js file
