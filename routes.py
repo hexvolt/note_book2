@@ -1,6 +1,7 @@
 from contextlib import contextmanager
 
 from api import views as api_views
+from core import views as core_views
 
 
 class RouterConfiguration(object):
@@ -32,7 +33,10 @@ class RouterConfiguration(object):
         """
         Connects all the routes described in this method to the Application.
         """
+        # Core routes
+        with self.add_route_group('', core_views) as add_route:
+            add_route('/', 'Home', name='home')
 
         # API routes
         with self.add_route_group('/api', api_views, 'api') as add_route:
-            add_route('/', 'Home', name='home')
+            add_route('/', 'Test', name='test')

@@ -1,11 +1,10 @@
 from aiohttp import web
 
 
-class Home(web.View):
+class Test(web.View):
 
     async def get(self):
-        print(self.request)
-        return web.Response(body=b"Hello, world")
+        return web.Response(body=b"Test API call")
 
     async def post(self):
         pass
